@@ -7,18 +7,22 @@ def reset():
     data_file.seek(0)
     header = next(data_reader)
 
+def super_print(a):
+    print(a)
+    print(a, file=open('output.txt', 'a'))
+
 def counter(a):
     count = 0
     for row in data_reader:
         if row[2] == candidates[a]:
             count += 1
     running_total.append(count)
-    print(f'{candidates[a]}: {round((count/vote_count*100), 0)}% ({count})')
+    super_print(f'{candidates[a]}: {round((count/vote_count*100), 0)}% ({count})')
     reset()
 
 print('')
-print('POLL ANALYSIS')
-print('-----------------------------------------------------------')
+super_print('POLL ANALYSIS')
+super_print('-----------------------------------------------------------')
 
 # Read csv
 data_path = os.path.join('Resources', 'election_data.csv')
@@ -28,8 +32,8 @@ with open(data_path, newline = '') as data_file:
 
 # Total number of votes
     vote_count = sum(1 for row in data_reader)
-    print(f'Total Votes: {vote_count}')
-    print('-----------------------------------------------------------')
+    super_print(f'Total Votes: {vote_count}')
+    super_print('-----------------------------------------------------------')
 
     reset()
 
@@ -38,7 +42,7 @@ with open(data_path, newline = '') as data_file:
     for candidate in data_reader:
             if candidate[2] not in candidates:
                 candidates.append(candidate[2])
-    print(f'Candidates: {candidates}')
+    super_print(f'Candidates: {candidates}')
 
     reset()
 
@@ -46,11 +50,11 @@ with open(data_path, newline = '') as data_file:
     running_total = []
     for i in range(len(candidates)):
         counter(i)
-    print('-----------------------------------------------------------')
+    super_print('-----------------------------------------------------------')
 
 # Winner of the election based on popular vote
     winner = max(running_total)
     for i in range(len(candidates)):
         if winner == running_total[i]:
-            print(f'WINNER: {candidates[i]}')
+            super_print(f'WINNER: {candidates[i]}')
     print('')
